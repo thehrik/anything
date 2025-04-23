@@ -1,28 +1,17 @@
+use std::collections::HashMap;
 use std::io::{self, Write};
-
-struct Items {
-    value: i64,
-    count: i64,
-}
 
 fn main() {
     let array = array_input();
-    let counts = counts(&array);
-    for item in counts {
-        println!("{}: {}", item.value, item.count);
-    }
+    println!("{:?}", counts(&array));
 }
 
-fn counts(array: &Vec<i64>) -> Vec<Items> {
-    let mut items: Vec<Items> = Vec::new();
+fn counts(array: &[i64]) -> HashMap<i64, i64> {
+    let mut items: HashMap<i64, i64> = HashMap::new();
 
     for &num in array {
         // Try to find the item in the vector
-        if let Some(item) = items.iter_mut().find(|item| item.value == num) {
-            item.count += 1;
-        } else {
-            items.push(Items { value: num, count: 1 });
-        }
+        items.entry(num).and_modify(|e| *e += 1).or_insert(1);
     }
 
     items
